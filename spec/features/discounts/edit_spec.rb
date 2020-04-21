@@ -12,9 +12,6 @@ RSpec.describe 'discount edit page', type: :feature do
     end
 
     it 'I can edit a discount' do
-
-
-
       fill_in :percent, with: 15
       fill_in :amount, with: 30
 

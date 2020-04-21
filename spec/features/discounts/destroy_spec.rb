@@ -10,13 +10,23 @@ RSpec.describe 'merchant index page', type: :feature do
     end
 
     it 'I can delete a discount' do
-      discount = @dog_shop.discounts.create(percent: 5, amount: 20)
+      discount1 = @dog_shop.discounts.create(percent: 5, amount: 20)
+      discount2 = @dog_shop.discounts.create(percent: 15, amount: 60)
+      discount3 = @dog_shop.discounts.create(percent: 50, amount: 200)
 
       visit '/merchant/discounts'
-      expect(page).to have_content("#{discount.percent}% discount on #{discount.amount} or more items.")
-      expect(page).to have_link("Delete Discount")
-      click_on "Delete Discount"
-      expect(page).to have_no_content("#{discount.percent}% discount on #{discount.amount} or more items.")
+      expect(page).to have_content("#{discount1.percent}% discount on #{discount1.amount} or more items.")
+      expect(page).to have_content("#{discount2.percent}% discount on #{discount2.amount} or more items.")
+      expect(page).to have_content("#{discount3.percent}% discount on #{discount3.amount} or more items.")
+
+      within "#discount-#{discount1.id}" do
+        expect(page).to have_link("Delete Discount")
+        click_on "Delete Discount"
+      end
+      
+      expect(page).to have_no_content("#{discount1.percent}% discount on #{discount1.amount} or more items.")
+      expect(page).to have_content("#{discount2.percent}% discount on #{discount2.amount} or more items.")
+      expect(page).to have_content("#{discount3.percent}% discount on #{discount3.amount} or more items.")
     end
   end
 end
