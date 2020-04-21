@@ -14,8 +14,8 @@ RSpec.describe 'merchant index page', type: :feature do
 
       visit '/merchant/discounts'
       expect(page).to have_content("#{discount.percent}% discount on #{discount.amount} or more items.")
-      expect(page).to have_link("Delete discount")
-      click_on "Delete discount"
+      expect(page).to have_link("Delete Discount")
+      click_on "Delete Discount"
       expect(page).to have_no_content("#{discount.percent}% discount on #{discount.amount} or more items.")
     end
   end
