@@ -27,15 +27,23 @@ RSpec.describe 'merchant index page', type: :feature do
     end
     it 'I can see a link to create a new discount' do
 
-      visit '/merchant'
+      visit '/merchant/discounts'
 
-      expect(page).to have_link("Discounts")
-
-      click_on "Discounts"
       expect(page).to have_link("New Discount")
-      
+
       click_on "New Discount"
       expect(current_path).to eq("/merchant/discounts/new")
+    end
+
+    it 'I can see a link to edit a discount' do
+      discount1 = @dog_shop.discounts.create(percent: 5, amount: 20)
+      visit '/merchant/discounts'
+
+
+      expect(page).to have_link("Edit Discount")
+
+      click_on "Edit Discount"
+      expect(current_path).to eq("/merchant/discounts/#{discount1.id}/edit")
     end
   end
 end
