@@ -1,8 +1,9 @@
 class Cart
-  attr_reader :contents
+  attr_reader :contents, :discounts
 
   def initialize(contents)
     @contents = contents
+    @discounts = []
   end
 
   def add_item(item)
@@ -34,6 +35,7 @@ class Cart
 
   def add_quantity(item)
     @contents[item] += 1
+    check_discounts(item)
   end
 
   def subtract_quantity(item)
@@ -46,5 +48,13 @@ class Cart
 
   def limit_reached?(item)
     @contents[item] == Item.find(item).inventory
+  end
+
+  def check_discounts(item)
+    item = Item.find(item)
+    merchant = Merchant.find(item.merchant_id)
+    discounts = merchant.discounts.order(percent: :desc)
+    amount_buying = @contents[item]
+    binding.pry
   end
 end
