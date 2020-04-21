@@ -2,3 +2,4 @@
 <% @merchant.discounts.each do |discount| %>
   <p><%=discount.percent%>% discount on <%=discount.amount%> or more items. </p>
 <%end%>
+<%= link_to "New Discount", "/merchant/discounts/new" %>

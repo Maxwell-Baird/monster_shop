@@ -1,0 +1,7 @@
+h1>Create New Discount For <%=link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
+
+
+<%= render partial: 'form', locals: { path: merchant_discounts_path,
+                                      method: :post,
+                                      button_name: "Create Discount",
+                                      item: @discount ||= @merchant.discounts.new() } %>

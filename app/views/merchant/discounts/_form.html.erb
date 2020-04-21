@@ -1,0 +1,11 @@
+<center>
+  <%= form_for [:merchant, item], :url => path, :method => method do |form| %>
+    <%= form.label :percent %>
+    <%= form.text_field :percent %>
+
+    <%= form.label :amount %>
+    <%= form.text_field :amount %>
+
+    <%= form.submit button_name %>
+  <% end %>
+</center>

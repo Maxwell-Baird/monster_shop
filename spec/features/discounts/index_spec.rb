@@ -25,5 +25,17 @@ RSpec.describe 'merchant index page', type: :feature do
       expect(page).to have_content("#{discount2.percent}% discount on #{discount2.amount} or more items.")
       expect(page).to have_content("#{discount3.percent}% discount on #{discount3.amount} or more items.")
     end
+    it 'I can see a link to create a new discount' do
+
+      visit '/merchant'
+
+      expect(page).to have_link("Discounts")
+
+      click_on "Discounts"
+      expect(page).to have_link("New Discount")
+      
+      click_on "New Discount"
+      expect(current_path).to eq("/merchant/discounts/new")
+    end
   end
 end
