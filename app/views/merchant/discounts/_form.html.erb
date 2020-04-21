@@ -1,11 +1,14 @@
 <center>
-  <%= form_for [:merchant, item], :url => path, :method => method do |form| %>
-    <%= form.label :percent %>
-    <%= form.text_field :percent %>
+  <%= form_tag path, method: method do %>
 
-    <%= form.label :amount %>
-    <%= form.text_field :amount %>
+    <%= label_tag :percent %>
+    <%= text_field_tag :percent %>
 
-    <%= form.submit button_name %>
+    <%= label_tag :amount %>
+    <%= text_field_tag :amount%>
+
+
+    <%= submit_tag button_name %>
   <% end %>
+  <br><%= link_to "Go Back", request.referer %>
 </center>
