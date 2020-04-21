@@ -1,0 +1,4 @@
+<h1> Discounts </h1>
+<% @merchant.discounts.each do |discount| %>
+  <p><%=discount.percent%>% discount on <%=discount.amount%> or more items. </p>
+<%end%>
