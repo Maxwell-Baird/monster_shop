@@ -1,6 +1,13 @@
 <h1>Create a new discount</h1>
+<center>
+  <%= form_tag "/merchant/discounts", method: :post do %>
+    <%= label_tag :percent %>
+    <%= text_field_tag :percent%>
 
-<%= render partial: 'form', locals: { path: "/merchant/discounts",
-                                      method: :post,
-                                      button_name: "Create Discount",
-                                    } %>
+    <%= label_tag :amount %>
+    <%= text_field_tag :amount%>
+
+    <%= submit_tag 'Create Discount' %>
+  <% end %>
+  <br><%= link_to "Go Back", request.referer %>
+</center>

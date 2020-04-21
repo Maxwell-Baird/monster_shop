@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'discount new page', type: :feature do
+RSpec.describe 'discount edit page', type: :feature do
   describe 'As a user' do
     before :each do
       @dog_shop = Merchant.create(name: "Meg's Dog Shop", address: '123 Dog Rd.', city: 'Hershey', state: 'PA', zip: 80203)
@@ -29,8 +29,7 @@ RSpec.describe 'discount new page', type: :feature do
       fill_in :percent, with: 15
 
       click_button "Update Discount"
-
-      expect(current_path).to eq('/merchant/discounts')
+      expect(current_path).to eq("/merchant/discounts")
       expect(page).to have_content("15% discount on 20 or more items.")
     end
 
@@ -43,7 +42,6 @@ RSpec.describe 'discount new page', type: :feature do
       click_button "Update Discount"
 
       expect(page).to have_content("Unable to update discount: Amount can't be blank.")
-      expect(page).to have_button("Create Discount")
     end
   end
 end

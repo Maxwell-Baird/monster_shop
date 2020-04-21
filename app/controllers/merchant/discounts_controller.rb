@@ -30,7 +30,7 @@ class Merchant::DiscountsController < Merchant::BaseController
     if @discount.save
       redirect_to "/merchant/discounts"
     else
-      flash[:error] = @discount.errors.full_messages.to_sentence
+      flash[:error] = "Unable to update discount: #{@discount.errors.full_messages.to_sentence}."
       render :edit
     end
   end
