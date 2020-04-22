@@ -24,18 +24,19 @@ class Cart
   end
 
   def subtotal(item)
-    item.price * @contents[item.id.to_s]
+    total = item.price * @contents[item.id.to_s]
+    discount = (discount(item.id)/100.00)
+    total - (discount * total)
   end
 
   def total
     @contents.sum do |item_id,quantity|
-      Item.find(item_id).price * quantity
+      Item.find(item_id).price * quantity - ((discount(item_id)/100.00) * Item.find(item_id).price * quantity)
     end
   end
 
   def add_quantity(item)
     @contents[item] += 1
-    check_discounts(item)
   end
 
   def subtract_quantity(item)
@@ -50,11 +51,14 @@ class Cart
     @contents[item] == Item.find(item).inventory
   end
 
-  def check_discounts(item)
-    item = Item.find(item)
+  def discount(item_id)
+    item = Item.find(item_id)
     merchant = Merchant.find(item.merchant_id)
-    discounts = merchant.discounts.order(percent: :desc)
-    amount_buying = @contents[item]
-    binding.pry
+    discounts = merchant.discounts.where('amount <= ?', @contents[item.id.to_s]).order(percent: :desc)
+    if discounts.first == nil
+      return 0
+    else
+      return discounts.first.percent
+    end
   end
 end

@@ -6,7 +6,8 @@ describe "cart page" do
     @mike = Merchant.create(name: "Mike's Print Shop", address: '123 Paper Rd.', city: 'Denver', state: 'CO', zip: 80203)
     @paper = @mike.items.create(name: "Lined Paper", description: "Great for writing on!", price: 20, image: "https://cdn.vertex42.com/WordTemplates/images/printable-lined-paper-wide-ruled.png", inventory: 13)
     @pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
-    @discount1 = @mike.discounts.create(percent: 5, amount: 2)
+    @discount1 = @mike.discounts.create(percent: 5, amount: 3)
+    @discount1 = @mike.discounts.create(percent: 10, amount: 5)
   end
 
   it "a discount is applied" do
@@ -29,7 +30,7 @@ describe "cart page" do
         click_on("+1")
         expect(page).to have_content("5")
       end
-      expect(page).to have_content("$95.00")
+      expect(page).to have_content("$90.00")
     end
 
   end
