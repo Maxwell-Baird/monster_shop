@@ -66,7 +66,9 @@ class Cart
     merchant = Merchant.find(item.merchant_id)
     discounts = merchant.discounts.where('amount <= ?', @contents[item.id.to_s]).order(percent: :desc)
     if discounts.first != nil
-      true
+      discounts.first.percent
+    else
+      0
     end
   end
 end

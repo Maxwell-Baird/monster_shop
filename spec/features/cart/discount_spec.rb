@@ -31,11 +31,13 @@ describe "cart page" do
         expect(page).to have_content("5")
       end
       expect(page).to have_content("$90.00")
+      expect(page).to have_content("A discount has been applied for 10%")
     end
     expect(page).to have_content("Total: $92")
   end
 
   it "a discount is removed" do
+    discount2 = @mike.discounts.create(percent: 10, amount: 3)
     visit "/items/#{@paper.id}"
     click_on "Add To Cart"
 
@@ -50,12 +52,19 @@ describe "cart page" do
         expect(page).to have_content("2")
         click_on("+1")
         expect(page).to have_content("3")
+      end
+      expect(page).to have_content("$54.00")
+      expect(page).to have_content("A discount has been applied for 10%")
+    end
+
+    within "#cart-item-#{@paper.id}" do
+      within "##{@paper.id}-quantity" do
         click_on("-1")
         expect(page).to have_content("2")
       end
       expect(page).to have_content("$40.00")
+      expect(page).to have_no_content("A discount has been applied for 10%")
     end
-    expect(page).to have_content("Total: $42")
   end
 
   it "the higher discount is chosen" do
@@ -79,6 +88,7 @@ describe "cart page" do
         click_on("+1")
         expect(page).to have_content("5")
       end
+      expect(page).to have_content("A discount has been applied for 15%")
       expect(page).to have_content("$85.00")
     end
     expect(page).to have_content("Total: $87")
