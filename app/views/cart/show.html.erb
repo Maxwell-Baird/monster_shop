@@ -40,6 +40,9 @@
         </td>
       <td>
         <p><%=number_to_currency(cart.subtotal(item))%></p>
+        <% if cart.check_discount(item.id) > 0 %>
+        <p> A discount has been applied for <%= cart.check_discount(item.id)%>% </p>
+        <% end %>
     </td>
     </tr>
   <% end %>

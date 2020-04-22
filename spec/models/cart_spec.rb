@@ -6,7 +6,9 @@ RSpec.describe Cart do
     @mike = Merchant.create(name: "Mike's Print Shop", address: '123 Paper Rd.', city: 'Denver', state: 'CO', zip: 80203)
     @paper = @mike.items.create(name: "Lined Paper", description: "Great for writing on!", price: 20, image: "https://cdn.vertex42.com/WordTemplates/images/printable-lined-paper-wide-ruled.png", inventory: 2)
     @pencil = @mike.items.create(name: "Yellow Pencil", description: "You can write on paper with it!", price: 2, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 100)
+    @seat = @mike.items.create(name: "Bike Seat", description: "Squishy tushy.", price: 14, image: "https://www.sefiles.net/images/library/zoom/planet-bike-little-a.r.s-bike-seat-231296-1-19-9.jpg", inventory: 17)
     @cart = Cart.new(Hash.new(0))
+    @mike.discounts.create(percent: 10, amount: 3)
   end
 
   describe "instance methods" do
@@ -74,6 +76,24 @@ RSpec.describe Cart do
       expect(@cart.limit_reached?(@paper.id.to_s)).to be_falsey
       @cart.add_item(@paper.id.to_s)
       expect(@cart.limit_reached?(@paper.id.to_s)).to be_truthy
+    end
+
+    it "#can find if a discount has been applied" do
+      @cart.add_item(@seat.id.to_s)
+      @cart.add_item(@seat.id.to_s)
+      @cart.add_item(@seat.id.to_s)
+      expect(@cart.check_discount(@seat.id)).to eq(10)
+      @cart.subtract_quantity(@seat.id.to_s)
+      expect(@cart.check_discount(@seat.id)).to eq(0)
+    end
+
+    it "#returns a percent in float" do
+      @cart.add_item(@seat.id.to_s)
+      @cart.add_item(@seat.id.to_s)
+      @cart.add_item(@seat.id.to_s)
+      expect(@cart.discount(@seat.id)).to eq(0.1)
+      @cart.subtract_quantity(@seat.id.to_s)
+      expect(@cart.check_discount(@seat.id)).to eq(0)
     end
   end
 end
