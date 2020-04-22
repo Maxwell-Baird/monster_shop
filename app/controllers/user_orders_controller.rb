@@ -28,10 +28,15 @@ class UserOrdersController < ApplicationController
     order = current_user.orders.new(order_params)
     if order.save
       cart.items.each do |item,quantity|
+        if cart.discount(item.id) != 0
+          price = item.price - item.price * cart.discount(item.id)
+        else
+          price = item.price
+        end
         order.item_orders.create({
           item: item,
           quantity: quantity,
-          price: item.price
+          price: price
           })
       end
       session.delete(:cart)

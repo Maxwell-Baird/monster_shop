@@ -105,6 +105,67 @@ RSpec.describe("Order Creation") do
       expect(page).to have_button("Create Order")
     end
 
+    it 'I have a discount on my order' do
+      @mike.discounts.create(percent: 10, amount: 2)
+      user = User.create(name: "David", address: "123 Test St", city: "Denver", state: "CO", zip: "80204", email: "123@example.com", password: "password", role: 1)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+
+      visit '/cart'
+      click_on 'Checkout'
+
+      fill_in :name, with: user.name
+      fill_in :address, with: user.address
+      fill_in :city, with: user.city
+      fill_in :state, with: user.state
+      fill_in :zip, with: user.zip
+
+      click_button "Create Order"
+
+      new_order = Order.last
+
+      expect(current_path).to eq("/profile/orders")
+
+      click_on "#{new_order.id}"
+      expect(current_path).to eql("/profile/orders/#{new_order.id}")
+
+      within '.shipping-address' do
+        expect(page).to have_content(user.name)
+        expect(page).to have_content(user.address)
+        expect(page).to have_content(user.city)
+        expect(page).to have_content(user.state)
+        expect(page).to have_content(user.zip)
+      end
+
+      within "#item-#{@paper.id}" do
+        expect(page).to have_link(@paper.name)
+        expect(page).to have_content("$18")
+        expect(page).to have_content("2")
+        expect(page).to have_content("$36")
+      end
+
+      within "#item-#{@tire.id}" do
+        expect(page).to have_link(@tire.name)
+        expect(page).to have_content("$#{@tire.price}")
+        expect(page).to have_content("1")
+        expect(page).to have_content("$100")
+      end
+
+      within "#item-#{@pencil.id}" do
+        expect(page).to have_link(@pencil.name)
+        expect(page).to have_content("$#{@pencil.price}")
+        expect(page).to have_content("1")
+        expect(page).to have_content("$2")
+      end
+
+      within "#grandtotal" do
+        expect(page).to have_content("Total Cost: $138.00")
+      end
+
+      within "#timestamps" do
+        expect(page).to have_content(new_order.created_at)
+      end
+    end
 
   end
 end
