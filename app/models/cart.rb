@@ -25,13 +25,12 @@ class Cart
 
   def subtotal(item)
     total = item.price * @contents[item.id.to_s]
-    discount = (discount(item.id)/100.00)
-    total - (discount * total)
+    total - (discount(item.id) * total)
   end
 
   def total
     @contents.sum do |item_id,quantity|
-      Item.find(item_id).price * quantity - ((discount(item_id)/100.00) * Item.find(item_id).price * quantity)
+      Item.find(item_id).price * quantity - (discount(item_id) * Item.find(item_id).price * quantity)
     end
   end
 
@@ -56,9 +55,18 @@ class Cart
     merchant = Merchant.find(item.merchant_id)
     discounts = merchant.discounts.where('amount <= ?', @contents[item.id.to_s]).order(percent: :desc)
     if discounts.first == nil
-      return 0
+      0
     else
-      return discounts.first.percent
+      discounts.first.percent / 100.00
+    end
+  end
+
+  def check_discount(item_id)
+    item = Item.find(item_id)
+    merchant = Merchant.find(item.merchant_id)
+    discounts = merchant.discounts.where('amount <= ?', @contents[item.id.to_s]).order(percent: :desc)
+    if discounts.first != nil
+      true
     end
   end
 end
