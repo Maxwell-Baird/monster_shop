@@ -3,7 +3,7 @@ class UserOrdersController < ApplicationController
   def index
   end
 
-  def cancel
+  def destroy
     order = Order.find(params[:order_id])
     order.update(status: "Cancelled")
     if order.save
